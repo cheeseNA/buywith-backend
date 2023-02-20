@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "withbuy-backend"
+version = "0.1.0"
+description = ""
+authors = ["cheeseNA <kurocat2000@gmail.com>"]
+readme = "README.md"
+packages = [{include = "withbuy_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.92.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
