@@ -24,3 +24,12 @@ async def db_create_item(data: dict) -> dict | bool:
     if new_item:
         return id_serializer(new_item)
     return False
+
+
+async def db_get_items(skip: int, limit: int) -> list:
+    items = []
+    for item in (
+        await collection_item.find().skip(skip).limit(limit).to_list(limit)
+    ):
+        items.append(id_serializer(item))
+    return items
