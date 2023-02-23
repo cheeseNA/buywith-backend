@@ -4,14 +4,14 @@ from fastapi import APIRouter
 from fastapi import Request, Response, HTTPException, Query
 from fastapi.encoders import jsonable_encoder
 from schemas import ItemIn, ItemOut
-from database import db_create_item, db_get_items
+from database import db_create_item, db_get_items, db_get_single_item
 from starlette.status import HTTP_201_CREATED
 
 router = APIRouter()
 
 
 @router.post("/api/item", response_model=ItemOut)
-async def create_todo(request: Request, response: Response, data: ItemIn):
+async def create_item(request: Request, response: Response, data: ItemIn):
     item = jsonable_encoder(data)
     item.update(
         {
@@ -35,3 +35,11 @@ async def get_items(
 ):
     res = await db_get_items(skip, limit)
     return res
+
+
+@router.get("/api/item/{id}", response_model=ItemOut)
+async def get_single_item(id: str):
+    res = await db_get_single_item(id)
+    if res:
+        return res
+    raise HTTPException(status_code=404, detail=f"Item of ID:{id} doesn't exist")

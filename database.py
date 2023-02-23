@@ -1,5 +1,6 @@
 import os
 
+from bson import ObjectId
 import motor.motor_asyncio
 from dotenv import load_dotenv
 
@@ -28,8 +29,13 @@ async def db_create_item(data: dict) -> dict | bool:
 
 async def db_get_items(skip: int, limit: int) -> list:
     items = []
-    for item in (
-        await collection_item.find().skip(skip).limit(limit).to_list(limit)
-    ):
+    for item in await collection_item.find().skip(skip).limit(limit).to_list(limit):
         items.append(id_serializer(item))
     return items
+
+
+async def db_get_single_item(id: str) -> dict | bool:
+    item = await collection_item.find_one({"_id": ObjectId(id)})
+    if item:
+        return id_serializer(item)
+    return False
