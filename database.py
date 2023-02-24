@@ -39,3 +39,12 @@ async def db_get_single_item(id: str) -> dict | bool:
     if item:
         return id_serializer(item)
     return False
+
+
+async def db_delete_item(id: str) -> bool:
+    item = await collection_item.find_one({"_id": ObjectId(id)})
+    if item:
+        deleted_item = await collection_item.delete_one({"_id": ObjectId(id)})
+        if deleted_item.deleted_count > 0:
+            return True
+    return False
