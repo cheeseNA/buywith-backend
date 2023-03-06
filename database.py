@@ -35,6 +35,8 @@ async def db_get_items(skip: int, limit: int) -> list:
 
 
 async def db_get_single_item(id: str) -> dict | bool:
+    if not ObjectId.is_valid(id):
+        return False
     item = await collection_item.find_one({"_id": ObjectId(id)})
     if item:
         return id_serializer(item)
@@ -42,6 +44,8 @@ async def db_get_single_item(id: str) -> dict | bool:
 
 
 async def db_delete_item(id: str) -> bool:
+    if not ObjectId.is_valid(id):
+        return False
     item = await collection_item.find_one({"_id": ObjectId(id)})
     if item:
         deleted_item = await collection_item.delete_one({"_id": ObjectId(id)})
